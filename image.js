@@ -1,5 +1,9 @@
 for (let i = 0; i < 100; i++) { 
-  img_file = cars[i] + "<br>";
+  src = $"https://github.com/manavmahan/image/blob/main/pngs/crop_{i}.png?raw=true"
+  img = document.createElement('img');
+
+  img.src = src;
+  document.body.appendChild(img);
 }
 
 Plotly.newPlot('container', plotData);
