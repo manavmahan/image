@@ -26,9 +26,11 @@
                 </div>
             </div>
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/manavmahan/image@latest/image.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/manavmahan/image@latest/earcut.js"></script>
         <script>
             function close_screen(){
                 screen.style.visibility = "collapse";
@@ -41,7 +43,7 @@
                 var x = data.points[0].x;
                 var y = data.points[0].y;
                 var num = x * ncols + y;
-                var detPlot = Plotly.newPlot("plot3d", getPlotData(num), );
+                plotBuilding(num);
                 console.log(num);
             });
         </script>

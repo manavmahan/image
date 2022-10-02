@@ -53,63 +53,111 @@ function getMatrix(nrows, ncols){
 color = {"wall":'#7a0006', "intWall":'#994251', "window":'#8cd3ff', "gFloor":'#c39b77', "floor":'#1f77b4', "roof":'#b3cf99', "site":'#77ab59'}
 opacity = {"wall":1, "intWall":1, "window":0.9, "gFloor":1, "floor":1, "roof":1, "site":1}
 
-function getPlotData(i){
-  src = `https://raw.githubusercontent.com/manavmahan/image/main/data/building_${i}.png`
-  let plot_data = []
-  src['zones'].forEach(z => {
-    z['Surfaces'].forEach(s => {
-      let x=[], y=[], z=[];
-      s["XYZList"]["XYZs"].forEach(p => {
-        x.push(p['X']);
-        y.push(p['Y']);
-        z.push(p['Z']);
-      });
+function leadingZeros(num, size){
+  num = num.toString();
+  while (num.length < size) num = "0" + num;
+  return num;
+}
 
-      if (s["SurfaceType"] == 2 && s["OutsideCondition"] == "Outdoors"){
-        t = "wall"
-        if (all(x==0))
-          axis = 'x';
-        else
-          axis = 'y';
-        
-        var wall = {type: 'mesh3d', x:x, y:y, z:z, delaunayaxis:axis, color:color[t], opacity:opacity[t], };
-        plot_data.push(wall);
+var layoutBui = { 
+  scene:{
+      xaxis: { showspikes: false, range: [0,150],
+          showgrid: false,
+          zeroline: false,
+          showline: false,
+          autotick: true,
+          ticks: '',
+          showticklabels: false, title: '', },
+      yaxis: { showspikes: false, autorange: [0,150],
+          showgrid: false,
+          zeroline: false,
+          showline: false,
+          autotick: true,
+          ticks: '',
+          showticklabels: false, title: '' },
+      zaxis: { showspikes: false, range: [0,75],
+          showgrid: false,
+          zeroline: false,
+          showline: false,
+          autotick: true,
+          ticks: '',
+          showticklabels: false,title: '', }
+    },
+  font: {size: 12},
+  paper_bgcolor:"rgba(0,0,0,0)",
+  plot_bgcolor:"rgba(0,0,0,0)",
+  margin: {l: 10, r: 10, b: 10, t: 10},
+  hovermode: "closest"
+};
+// layoutBui.scene.camera = {
+//   up:{x:0, y:0, z:1},
+//   center:{x:0, y:0, z:0}
+// }
 
-        lines = {type:"scatter3d", x:x, y:y, z:z, mode:'lines', line=dict(color= 'rgb(0, 0, 0)', width=2), showlegend:false};
-        plot_data.push(lines);
+var config = {displayModeBar:false, responsive: true};
 
-        s["Fenestrations"].forEach( w => {
-          let x=[], y=[], z=[];
-          t = "window"
-          w["VerticesList"]["XYZs"].forEach(p => {
-            x.push(p['X']);
-            y.push(p['Y']);
-            z.push(p['Z']);
-          });
-
-          var window = {type: 'mesh3d', x:x, y:y, z:z, delaunayaxis:axis, color:color[t], opacity:opacity[t], };
-          plot_data.push(window);
-
-          lines = {type:"scatter3d", x:x, y:y, z:z, mode:'lines', line=dict(color= 'rgb(0, 0, 0)', width=1), showlegend:false};
-          plot_data.push(lines);
+function plotBuilding(i){
+  var src = `https://raw.githubusercontent.com/manavmahan/image/main/data/building_${leadingZeros(i, 3)}.json`;
+  var plotData = [];
+  
+  $.getJSON(src, function(building){
+    building['zones'].forEach(z => {
+      z['Surfaces'].forEach(s => {
+        var x=[], y=[], z=[];
+        s["XYZList"]["XYZs"].forEach(p => {
+          x.push(p['X']);
+          y.push(p['Y']);
+          z.push(p['Z']);
         });
-        continue;
-      }
 
-      if (s["SurfaceType"] != 2){
-        t = "roof"
-        vertices = np.array([x, y,]).T
-        rings = np.array([len(vertices)])
-        triangles = earcut.triangulate_float32(vertices, rings)
-        roof = go.Mesh3d(x=x, y=y, z=z, i=triangles[::3], j=triangles[1::3], k=triangles[2::3], color=color[t], opacity=opacity[t],)
-        plot_data += [roof]
+        if (s["SurfaceType"] == 2 && s["OutsideCondition"] == "Outdoors"){
+          t = "wall"
+          if (x.every( (val, _, __) => val == 0 ))
+            axis = 'x';
+          else
+            axis = 'y';
+          
+          var wall = {type: 'mesh3d', x:x, y:y, z:z, delaunayaxis:axis, color:color[t], opacity:opacity[t], };
+          plotData.push(wall);
 
-        if (s["SurfaceType"] == 0){
-          lines = {x:x, y:y, z:z, mode:'lines', line={color: 'rgb(0, 0, 0)', width:5}, showlegend=False};
-          plot_data += [lines];
+          lines = {type:"scatter3d", x:x, y:y, z:z, mode:'lines', line:{color: 'rgb(0, 0, 0)', width:2}, showlegend:false};
+          // plotData.push(lines);
+
+          s["Fenestrations"].forEach( w => {
+            var x=[], y=[], z=[];
+            t = "window"
+            w["VerticesList"]["XYZs"].forEach(p => {
+              x.push(p['X']);
+              y.push(p['Y']);
+              z.push(p['Z']);
+            });
+
+            var window = {type: 'mesh3d', x:x, y:y, z:z, delaunayaxis:axis, color:color[t], opacity:opacity[t], };
+            plotData.push(window);
+
+            lines = {type:"scatter3d", x:x, y:y, z:z, mode:'lines', line:{color: 'rgb(0, 0, 0)', width:1}, showlegend:false};
+            // plotData.push(lines);
+          });
         }
-      }
+
+        if (s["SurfaceType"] != 2){
+          t = "roof";
+          triangles = earcut([x, y], dimensions = 2);
+          i = triangles.filter((e, i) => i % 3 == 0)
+          j = triangles.filter((e, i) => i % 3 == 1)
+          k = triangles.filter((e, i) => i % 3 == 2)
+
+          roof = {type: 'mesh3d', x:x, y:y, z:z, i:i, j:j, k:k, color:color[t], opacity:opacity[t], }
+          plotData.push(roof);
+
+          if (s["SurfaceType"] == 0){
+            lines = {x:x, y:y, z:z, mode:'lines', line:{color: 'rgb(0, 0, 0)', width:5}, showlegend:false};
+            // plotData.push(lines);
+          }
+        }
+      });
     });
+    Plotly.newPlot("plot3d", plotData, layoutBui, config);
   });
 }
 
