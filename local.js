@@ -1,3 +1,7 @@
+function listSum(lst) {
+	return lst.reduce(function(a, b){ return a+b; });
+};
+
 function confidence95(numbers) {
 	var sum = listSum(numbers);
 	var mean = sum/numbers.length;
