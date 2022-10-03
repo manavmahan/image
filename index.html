@@ -14,38 +14,30 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
     </head>
+        
     <body id="page-top">
         <!-- About Section-->
-        <div id="row" style="display: flex;">
-            <div id="container" style="flex: 1"></div>
-            <div id="screen" style="flex: 1; display: flex; background-color: #000000cf; margin-left: -100%; z-index: 1; align-items: center; visibility: hidden;" >
-                <div style="display: flex; flex:1; background-color: #ffffffbf; z-index: 10; margin: 1em; height: calc(100% - 2em); width: calc(100% - 2em);"> 
-                    <div id="plot3d" style="background-color: #1aba3dbf; z-index: 20; height: 100%; width: 50%;"></div>
-                    <div id="analysis" style="background-color: #ca2a2abf; z-index: 10; height: 100%; width: 50%;"></div>
-                    <i class="fa-solid fa-xmark" style="flex:1; margin: 1rem;" onclick="close_screen()"></i>
-                </div>
-            </div>
+        <div id="row" style="display: flex; margin: 0">
+            <div id="container" style="flex: 1; margin: 0"></div>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/manavmahan/image@latest/image.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/manavmahan/image@latest/earcut.js"></script>
-        <script>
-            function close_screen(){
-                screen.style.visibility = "collapse";
-            }
-
-            let screen = document.getElementById("screen");
-            myPlot.on('plotly_click', function(data){
-                console.log(screen);
-                screen.style.visibility = "unset";
-                var x = data.points[0].x;
-                var y = data.points[0].y;
-                var num = x * ncols + y;
-                plotBuilding(num);
-                console.log(num);
-            });
-        </script>
+        <script type = "text/javascript" src = "local.js"></script>
+        <script type = "text/javascript" src = "analysis.js"></script>
+        <script type = "text/javascript" src = "building.js"></script>
+        <script type = "text/javascript" src = "image.js"></script>
     </body>
 </html>
+
+<template id="screen">
+    <div style="flex: 1; display: flex; background-color: #000000cf; margin-left: -100%; z-index: 1; align-items: center; " >
+        <div style="display: flex; flex:1; background-color: #ffffffbf; z-index: 10; margin: 1em; height: calc(100% - 2em); width: calc(100% - 2em);"> 
+            <div id="plot3d" style="background-color: #ffffff00; z-index: 20; height: 100%; width: 70%;"></div>
+            <div id="analysis" style="background-color: #ffffff00; z-index: 10; height: 100%; width: 30%;"></div>
+            <i class="fa-solid fa-xmark" style="flex:1; margin: 1rem;" onclick="closeScreen()"></i>
+        </div>
+    </div>
+</template>
