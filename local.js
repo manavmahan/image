@@ -1,4 +1,4 @@
-function Confidence95(numbers) {
+function confidence95(numbers) {
 	var sum = listSum(numbers);
 	var mean = sum/numbers.length;
 	var sqerrs = numbers.map(function(n){ return (n - mean)*(n - mean); });
