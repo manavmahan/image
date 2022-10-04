@@ -1,4 +1,5 @@
 const row = document.getElementById("row");
+const container = document.getElementById("container");
 
 function confidence95(numbers) {
 	var sum = listSum(numbers);
@@ -13,14 +14,45 @@ function confidence95(numbers) {
 	};
 };
 
+function closeLoader(){
+	for (var i = 0; i < container.children.length; i++)
+	{
+		if (container.children[i].id == "loader1"){
+			container.removeChild(container.children[i]);
+			break;
+		}
+	}
+}
+
 function closeScreen(){
 	row.removeChild(row.lastChild);
 }
 
+function createLoader(x, y){
+	var loader1 = null;
+	for (var i = 0; i < container.children.length; i++)
+	{
+		if (container.children[i].id == "loader1"){
+			loader1 = container.children[i];
+		}
+	}
+
+	if (loader1 == null)
+	{
+		var template = document.getElementById("loader");
+		var loader = template.content.cloneNode(true);
+		var loader1 = loader.children[0];
+		loader1.id = "loader1";
+		container.appendChild(loader1);
+	}
+	
+	loader1.style.margin = `${y}px 0px 0px ${x}px`;
+}
+
 function createScreen(){
 	var template = document.getElementById("screen");
-	var screen_1 = template.content.cloneNode(true);
-	row.appendChild(screen_1);
+	var screen = template.content.cloneNode(true);
+	row.appendChild(screen);
 }
 
 function getNormal(x, y, z){
@@ -32,6 +64,7 @@ function getNormal(x, y, z){
 }
 
 function leadingZeros(num, size){
+	console.log(num);
 	num = num.toString();
 	while (num.length < size) num = "0" + num;
 	return num;

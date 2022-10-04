@@ -1,34 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="Probablisitic Energy Analysis using Machine Learning and Building Information Modelling" />
-        <meta name="author" content="manav" />
-        <title>pEnergyAnalysis - Start Analysing using ML and BIM</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Font Awesome icons (free version)-->
-        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
-    </head>
-        
+<style>
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 6px solid #fff;
+      border-radius: 50%;
+      display: inline-block;
+      position: relative;
+      box-sizing: border-box;
+      animation: rotation 1s linear infinite;
+      margin: 25px;
+    } 
+    .loader::after {
+      content: '';  
+      box-sizing: border-box;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-bottom-color: #d72728;
+    }
+    
+    @keyframes rotation {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    } 
+</style>
+
+<html lang="en">      
     <body id="page-top">
-        <!-- About Section-->
         <div id="row" style="display: flex; margin: 0">
-            <div id="container" style="flex: 1; margin: 0"></div>
+            <div id="container" style="display: flex; flex: 1; margin: 0"></div>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/manavmahan/image@latest/image.js"></script>
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/gh/manavmahan/image@latest/earcut.js"></script>
-        <script type = "text/javascript" src = "local.js"></script>
-        <script type = "text/javascript" src = "analysis.js"></script>
-        <script type = "text/javascript" src = "building.js"></script>
-        <script type = "text/javascript" src = "image.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/manavmahan/image@latest/local.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/manavmahan/image@latest/analysis.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/manavmahan/image@latest/building.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/manavmahan/image@latest/image.js"></script>
     </body>
 </html>
 
@@ -37,7 +57,15 @@
         <div style="display: flex; flex:1; background-color: #ffffffbf; z-index: 10; margin: 1em; height: calc(100% - 2em); width: calc(100% - 2em);"> 
             <div id="plot3d" style="background-color: #ffffff00; z-index: 20; height: 100%; width: 70%;"></div>
             <div id="analysis" style="background-color: #ffffff00; z-index: 10; height: 100%; width: 30%;"></div>
-            <i class="fa-solid fa-xmark" style="flex:1; margin: 1rem;" onclick="closeScreen()"></i>
+            <a onclick="closeScreen()"> 
+                <i class="fa-solid fa-xmark" style="flex:1; margin: 1rem;"></i>
+            </a>
         </div>
+    </div>
+</template>
+
+<template id="loader">
+    <div style="width:100px; height:100px; z-index: 100; background-color: #00000000; pointer-events: none;">
+        <div class="loader" ></div>
     </div>
 </template>

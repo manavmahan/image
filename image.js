@@ -1,7 +1,7 @@
-const nrows = 8;
-const ncols = 4;
+const nrows = 4;
+const ncols = 8;
 
-const size = {width: nrows * 100, height: ncols * 100}
+const size = {width: ncols * 100, height: nrows * 100}
 
 const nums = 100;
 function createRandomMapping(num){
@@ -26,25 +26,27 @@ for (let i = 0; i < arr.length; i++) {
     "source": src,
     "xref": "x",
     "yref": "y",
-    "x": Math.floor(i/ncols), 
-    "y": i%ncols, 
-    "sizex": 0.8,
-    "sizey": 0.8,
+    "x": i%ncols,
+    "y": Math.floor(i/ncols), 
+    "sizex": 0.85,
+    "sizey": 0.85,
     "xanchor": "center",
     "yanchor": "middle"
   };
   images.push(img)
 }
 
-var layout = {
+const layout = {
   autosize: false,
-  xaxis: {visible: false, range: [-.5, nrows + .5]},
-  yaxis: {visible: false, range: [-.5, ncols + .5]},
+  xaxis: {visible: false, range: [-.5, ncols - .5]},
+  yaxis: {visible: false, range: [-.5, nrows - .5]},
   hovermode:'closest',
   width: size.width,
   height: size.height,
   images:images,
   margin: {l: 0, r: 0, b: 0, t: 0},
+  paper_bgcolor: '#00000000',
+  plot_bgcolor: '#00000000'
 };
 
 function range(start, stop, inc){
@@ -58,20 +60,21 @@ function range(start, stop, inc){
 function getMatrix(nrows, ncols){
   var x = [];
   var y = [];
-  range(0, nrows, 1).forEach(x1 => {
-    range(0, ncols, 1).forEach(y1 =>{
+  range(0, ncols, 1).forEach(x1 => {
+    range(0, nrows, 1).forEach(y1 =>{
       x.push(x1);
       y.push(y1);
     })
   });
   
-  return {x: x, y: y, type: 'line', line: {color: 'rgba(0, 0, 0, 1)'}, mode: 'markers'}
+  return {x: x, y: y, type: 'line', line: {color: 'rgba(0, 0, 0, 1)'}, mode: 'markers', hoverinfo:'none'}
 }
 
 function plotData(num){
   var src = `https://raw.githubusercontent.com/manavmahan/image/main/data/building_${leadingZeros(num, 3)}.json`;
-  createScreen();
   $.getJSON(src, function(building){
+    closeLoader();
+    createScreen();
     plotBuilding(building);
     plotAnalysis(building);
   });
@@ -85,18 +88,19 @@ myPlot.on('plotly_click', function(data){
   // screen.style.visibility = "unset";
   var x = data.points[0].x;
   var y = data.points[0].y;
-  var num = x * ncols + y;
+  var num = x + y * ncols;
   plotData(arr[num]);
 });
 
-// myPlot.on('plotly_hover', function(data){
-//   var x = data.points[0].x;
-//   var y = data.points[0].y
-//   console.log(x, y);
-// })
+myPlot.on('plotly_hover', function(data){
+  var x = data.points[0].x;
+  var y = data.points[0].y;
+
+  createLoader(- (ncols - x) * 100, (nrows -y - 1) * 100);
+})
 
 
 
 // myPlot.on('plotly_unhover', function(data){
-//   alert('released');
+//   closeLoader();
 // });
