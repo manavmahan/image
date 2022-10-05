@@ -2,14 +2,6 @@
 const allCategories = [45, 50, 55, 60, 65, 70, 75];
 const color = ["#2ca02c", "#2ca02c", "#1f77b4", "#9467bd", "#ff7f0e", "#d62728", "#000000"]
 
-function getRandomArray(min, max, num) {
-    var ar = []
-    for(var i=0; i<num; ++i){
-      ar.push(Math.random() * (max - min) + min)
-    }
-    return ar;
-}
-
 function getColor(mean){
     let i = 0;
     while (allCategories[i] < mean){
@@ -24,12 +16,8 @@ function getColor(mean){
   
 function plotAnalysis(building){
     var data = [];
-    var epp = building["EPP"];
-    // var ep = []
-    // for (i = 0; i < epp.length; i++) { 
-    //   ep.push(epp[i]["EUI"]);
-    // }
-    ep = getRandomArray(50, 55, 200)
+    var ep = building["EPP"];
+
     ci = confidence95(ep);
 
     var col = getColor(ci.mean);
