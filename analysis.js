@@ -1,14 +1,14 @@
 
-const allCategories = [45, 50, 55, 60, 65, 70, 75];
-const color = ["#2ca02c", "#2ca02c", "#1f77b4", "#9467bd", "#ff7f0e", "#d62728", "#000000"]
+const allCategories = [45, 55, 65, 75];
+const color = ["#2ca02c", "#1f77b4", "#9467bd", "#d62728", "#000000"]
 
 function getColor(mean){
     let i = 0;
     while (allCategories[i] < mean){
         i ++;
     }
-    var col1 = color[i];
-    var col2 = color[i+1];
+    var col1 = color[i - 1];
+    var col2 = color[i];
     var weight = (mean - allCategories[i]) / (allCategories[i+1] - allCategories[i]);
     var col = getWeighedColor(col1, col2, weight);
     return col;

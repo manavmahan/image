@@ -64,7 +64,6 @@ function getNormal(x, y, z){
 }
 
 function leadingZeros(num, size){
-	console.log(num);
 	num = num.toString();
 	while (num.length < size) num = "0" + num;
 	return num;

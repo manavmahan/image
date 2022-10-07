@@ -5,7 +5,7 @@ const size = {width: ncols * 100, height: nrows * 100}
 
 const nums = 400;
 function createRandomMapping(num){
-  var ar = []
+  var ar = [];
   while(ar.length < num){
     var r = Math.floor(Math.random() * 400);
     if(ar.indexOf(r) === -1) ar.push(r);
@@ -20,7 +20,7 @@ images = []
 const arr = createRandomMapping( nrows * ncols);
 
 for (let i = 0; i < arr.length; i++) { 
-  src = `https://raw.githubusercontent.com/manavmahan/image/main/Images/crop_${arr[i]}.png`
+  src = `https://raw.githubusercontent.com/manavmahan/image/main/Images/${leadingZeros(arr[i], 3)}.png`
   img = {
     "type": "image",
     "source": src,
@@ -71,7 +71,7 @@ function getMatrix(nrows, ncols){
 }
 
 function plotData(num){
-  var src = `https://raw.githubusercontent.com/manavmahan/image/main/Data/b_${leadingZeros(num, 3)}.json`;
+  var src = `https://raw.githubusercontent.com/manavmahan/image/main/data/b_${leadingZeros(num, 3)}.json`;
   $.getJSON(src, function(building){
     closeLoader();
     createScreen();
