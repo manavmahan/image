@@ -1,7 +1,4 @@
 
-const allCategories = [45, 55, 65, 75];
-const color = ["#2ca02c", "#1f77b4", "#9467bd", "#d62728", "#000000"]
-
 function getColor(mean){
     let i = 0;
     while (allCategories[i] < mean){
@@ -9,8 +6,8 @@ function getColor(mean){
     }
     var col1 = color[i - 1];
     var col2 = color[i];
-    var weight = (mean - allCategories[i]) / (allCategories[i+1] - allCategories[i]);
-    var col = getWeighedColor(col1, col2, weight);
+    var weight = (mean - allCategories[i-1]) / (allCategories[i] - allCategories[i-1]);
+    var col = GetWeighedColor(col1, col2, weight);
     return col;
 }
   
@@ -63,16 +60,18 @@ function plotAnalysis(building){
     };
     data.push(line);
     data.push(box);
+    var energyScale = GetEnergyScale();
+    energyScale.forEach(x => data.push(x));
   
     var layout2 = {
       autosize: true,
-      xaxis: {visible: false, range: [-.5, .5]},
-      title: "EUI (kWh/a.m\u00b2)",
+      xaxis: {visible: false, range: [-1.1, .25]},
+      yaxis: {visible: true, range: [allCategories[0], allCategories[allCategories.length - 1]], title: {text: "EUI (kWh/a.m\u00b2)"}},
       title_font_color: "rgb(0, 0, 0)",
       hovermode:'closest',
       paper_bgcolor:"rgba(0,0,0,0)",
       plot_bgcolor:"rgba(0,0,0,0)",
-      margin: {l: 0, r: 0, t:50, b:25},
+      margin: {l: 80, r: 0, t:50, b:25},
     };
     var config2 = {displayModeBar:false, responsive: true};
   

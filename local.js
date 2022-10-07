@@ -83,7 +83,7 @@ function hexToRGBA(hex) {
 	} : null;
   }
 
-function getWeighedColor(col1, col2, w){
+function GetWeighedColor(col1, col2, w){
 	var c1 = col1[0]==='#' ? hexToRGBA(col1) : col1
 	var c2 = col2[0]==='#' ? hexToRGBA(col2) : col2
 	var c ={
